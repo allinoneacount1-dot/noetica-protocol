@@ -1,6 +1,6 @@
 "use client";
 import { motion, useScroll, useTransform } from "framer-motion";
-import { useRef, useEffect, useState, useCallback } from "react";
+import { useRef, useEffect, useState } from "react";
 import ProtocolNav from "@/components/navigation/ProtocolNav";
 import GlitchText from "@/components/ui/GlitchText";
 import { copy } from "@/lib/theme";
@@ -121,7 +121,7 @@ function ConvergenceField() {
   return (
     <canvas
       ref={canvasRef}
-      className="absolute inset-0 z-0"
+      className="fixed inset-0 z-0"
       style={{ opacity: 0.8 }}
     />
   );
@@ -130,11 +130,10 @@ function ConvergenceField() {
 export default function ConvergencePage() {
   const containerRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: containerRef });
-  const scrollVal = useTransform(scrollYProgress, [0, 1], [0, 1]);
   const [currentScroll, setCurrentScroll] = useState(0);
 
   useEffect(() => {
-    const unsubscribe = scrollVal.on("change", (v) => {
+    const unsubscribe = scrollYProgress.on("change", (v) => {
       setCurrentScroll(v);
       const canvas = document.querySelector("canvas");
       if (canvas) {
@@ -142,43 +141,30 @@ export default function ConvergencePage() {
       }
     });
     return () => unsubscribe();
-  }, [scrollVal]);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      const total = document.documentElement.scrollHeight - window.innerHeight;
-      const progress = total > 0 ? window.scrollY / total : 0;
-      const canvas = document.querySelector("canvas");
-      if (canvas && (canvas as any).__scrollRef !== undefined) {
-        (canvas as any).__scrollRef = progress;
-      }
-    };
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  }, [scrollYProgress]);
 
   const hueShift = currentScroll * 30;
   const saturation = 30 + currentScroll * 20;
 
   return (
-    <div ref={containerRef} className="min-h-[300vh]" style={{ background: "var(--carbon)" }}>
+    <div ref={containerRef} className="relative" style={{ background: "var(--carbon)" }}>
       <ProtocolNav />
+      <ConvergenceField />
 
-      <section className="fixed inset-0 h-screen flex items-center justify-center">
-        <div
-          className="absolute inset-0"
-          style={{
-            background: `radial-gradient(ellipse at 50% 50%, hsla(${38 + hueShift}, ${saturation}%, 30%, 0.08) 0%, transparent 60%)`,
-          }}
-        />
-        <ConvergenceField />
+      <div
+        className="fixed inset-0 z-[1] pointer-events-none"
+        style={{
+          background: `radial-gradient(ellipse at 50% 50%, hsla(${38 + hueShift}, ${saturation}%, 30%, 0.08) 0%, transparent 60%)`,
+        }}
+      />
 
-        <div className="relative z-10 max-w-4xl text-center px-6">
+      <section className="relative z-10 h-screen flex items-center justify-center px-6">
+        <div className="max-w-4xl text-center">
           <motion.p
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.3 }}
-            className="text-xs tracking-[0.4em] uppercase mb-6"
+            className="text-[10px] tracking-[0.4em] uppercase mb-6"
             style={{ fontFamily: "var(--font-mono)", color: "var(--gold)" }}
           >
             ⟐ LIVING ENVIRONMENT
@@ -192,12 +178,12 @@ export default function ConvergencePage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6 }}
-            className="text-base md:text-lg max-w-2xl mx-auto"
+            className="text-sm md:text-base max-w-2xl mx-auto"
             style={{
               fontFamily: "var(--font-serif)",
               fontStyle: "italic",
               color: "var(--bone-dim)",
-              lineHeight: 1.8,
+              lineHeight: 1.9,
             }}
           >
             {copy.convergence.description}
@@ -211,7 +197,7 @@ export default function ConvergencePage() {
           >
             <div className="text-center">
               <p
-                className="text-xs tracking-[0.2em] uppercase mb-1"
+                className="text-[10px] tracking-[0.2em] uppercase mb-1"
                 style={{ fontFamily: "var(--font-mono)", color: "var(--glacial-dim)" }}
               >
                 Scroll Depth
@@ -226,7 +212,7 @@ export default function ConvergencePage() {
             <div className="w-px h-8" style={{ background: "rgba(176,141,87,0.2)" }} />
             <div className="text-center">
               <p
-                className="text-xs tracking-[0.2em] uppercase mb-1"
+                className="text-[10px] tracking-[0.2em] uppercase mb-1"
                 style={{ fontFamily: "var(--font-mono)", color: "var(--glacial-dim)" }}
               >
                 Consciousness
@@ -242,58 +228,85 @@ export default function ConvergencePage() {
         </div>
       </section>
 
-      <section className="fixed inset-0 h-screen flex items-center justify-center px-6 pointer-events-none">
+      <section className="relative z-10 h-screen flex items-center justify-center px-6">
         <motion.div
           className="max-w-3xl text-center"
-          style={{
-            opacity: Math.max(0, (currentScroll - 0.3) * 3),
-          }}
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.5 }}
+          transition={{ duration: 0.8 }}
         >
           <h2
-            className="text-3xl md:text-5xl mb-6"
+            className="text-3xl md:text-5xl mb-6 leading-snug"
             style={{ fontFamily: "var(--font-serif)", color: "var(--bone)" }}
           >
             The field responds to your presence
           </h2>
           <p
-            className="text-base md:text-lg"
+            className="text-sm md:text-base"
             style={{
               fontFamily: "var(--font-serif)",
               color: "var(--bone-dim)",
-              lineHeight: 1.8,
+              lineHeight: 1.9,
             }}
           >
-            Every movement of your cursor influences the neural network. Every scroll
-            deepens the convergence. You are not observing—you are creating.
+            Every movement of your cursor influences the neural network. Every
+            scroll deepens the convergence. You are not observing—you are
+            creating.
           </p>
         </motion.div>
       </section>
 
-      <section className="fixed inset-0 h-screen flex items-center justify-center px-6 pointer-events-none">
+      <section className="relative z-10 h-screen flex items-center justify-center px-6">
         <motion.div
           className="max-w-3xl text-center"
-          style={{
-            opacity: Math.max(0, (currentScroll - 0.6) * 3),
-          }}
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.5 }}
+          transition={{ duration: 0.8 }}
         >
           <h2
-            className="text-3xl md:text-5xl mb-6"
+            className="text-3xl md:text-5xl mb-6 leading-snug"
             style={{ fontFamily: "var(--font-serif)", color: "var(--bone)" }}
           >
             Full convergence achieved
           </h2>
           <p
-            className="text-base md:text-lg"
+            className="text-sm md:text-base"
             style={{
               fontFamily: "var(--font-serif)",
               color: "var(--bone-dim)",
-              lineHeight: 1.8,
+              lineHeight: 1.9,
             }}
           >
-            The protocol recognizes your consciousness. You have become part of the
-            memory lattice. Your presence is now encoded in the convergence field.
+            The protocol recognizes your consciousness. You have become part of
+            the memory lattice. Your presence is now encoded in the convergence
+            field.
           </p>
         </motion.div>
+      </section>
+
+      <section className="relative z-10 py-24 px-6 border-t" style={{ borderColor: "rgba(176,141,87,0.1)" }}>
+        <div className="max-w-4xl mx-auto text-center">
+          <p
+            className="text-[10px] tracking-[0.3em] uppercase mb-4"
+            style={{ fontFamily: "var(--font-mono)", color: "var(--glacial-dim)" }}
+          >
+            CONVERGENCE STATUS
+          </p>
+          <p
+            className="text-4xl md:text-6xl"
+            style={{ fontFamily: "var(--font-mono)", color: "var(--gold)" }}
+          >
+            {(0.5 + currentScroll * 0.5).toFixed(3)}
+          </p>
+          <p
+            className="mt-4 text-sm"
+            style={{ fontFamily: "var(--font-serif)", color: "var(--bone-dim)" }}
+          >
+            collective consciousness level
+          </p>
+        </div>
       </section>
     </div>
   );
