@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import GlobalCursor from "@/components/GlobalCursor";
+import SystemMood from "@/context/SystemMood";
 
 export const metadata: Metadata = {
   title: "NOETICA PROTOCOL",
@@ -15,10 +16,12 @@ export default function RootLayout({
   return (
     <html lang="en" className="h-full antialiased">
       <body className="min-h-full flex flex-col">
-        <GlobalCursor />
-        <div className="noise-overlay" />
-        <div className="scan-line" />
-        {children}
+        <SystemMood>
+          <GlobalCursor />
+          <div className="noise-overlay" />
+          <div className="scan-line" />
+          {children}
+        </SystemMood>
       </body>
     </html>
   );

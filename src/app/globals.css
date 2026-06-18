@@ -24,6 +24,12 @@
   --font-serif: 'Playfair Display', Georgia, serif;
   --font-sans: 'DM Sans', system-ui, sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
+
+  /* System mood vars - updated by JS */
+  --consciousness: 0.5;
+  --scroll-depth: 0;
+  --scroll-speed: 0;
+  --click-ripple: 0;
 }
 
 @theme inline {
@@ -68,7 +74,7 @@ body {
 }
 
 ::-webkit-scrollbar {
-  width: 4px;
+  width: 3px;
 }
 
 ::-webkit-scrollbar-track {
@@ -83,6 +89,10 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   background: var(--gold);
 }
+
+/* ============================
+   KEYFRAME ANIMATIONS
+   ============================ */
 
 @keyframes glitch-1 {
   0%, 100% { clip-path: inset(0 0 0 0); transform: translate(0); }
@@ -104,6 +114,15 @@ body {
   100% { transform: translateY(100vh); }
 }
 
+@keyframes grain {
+  0%, 100% { transform: translate(0, 0); }
+  10% { transform: translate(-5%, -10%); }
+  30% { transform: translate(3%, -15%); }
+  50% { transform: translate(12%, 9%); }
+  70% { transform: translate(9%, 4%); }
+  90% { transform: translate(-1%, 7%); }
+}
+
 @keyframes float {
   0%, 100% { transform: translateY(0px); }
   50% { transform: translateY(-10px); }
@@ -112,21 +131,6 @@ body {
 @keyframes pulse-glow {
   0%, 100% { opacity: 0.4; }
   50% { opacity: 1; }
-}
-
-@keyframes text-reveal {
-  0% { clip-path: inset(0 100% 0 0); }
-  100% { clip-path: inset(0 0% 0 0); }
-}
-
-@keyframes fade-up {
-  0% { opacity: 0; transform: translateY(30px); }
-  100% { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes blink-caret {
-  0%, 100% { border-color: transparent; }
-  50% { border-color: var(--gold); }
 }
 
 @keyframes neural-pulse {
@@ -139,14 +143,63 @@ body {
   100% { background-position: 200% 0; }
 }
 
-@keyframes grain {
-  0%, 100% { transform: translate(0, 0); }
-  10% { transform: translate(-5%, -10%); }
-  30% { transform: translate(3%, -15%); }
-  50% { transform: translate(12%, 9%); }
-  70% { transform: translate(9%, 4%); }
-  90% { transform: translate(-1%, 7%); }
+/* TEXT STATE: Memory (blur + fade edges) */
+@keyframes text-memory-drift {
+  0%, 100% { filter: blur(0px); opacity: 1; }
+  30% { filter: blur(1.5px); opacity: 0.85; }
+  60% { filter: blur(0.5px); opacity: 0.95; }
 }
+
+/* TEXT STATE: Recollection (jitter/reconstruction) */
+@keyframes text-recollection {
+  0%, 100% { transform: translate(0, 0) skewX(0deg); }
+  10% { transform: translate(0.5px, 0) skewX(0.2deg); }
+  20% { transform: translate(-0.3px, 0.2px) skewX(-0.1deg); }
+  30% { transform: translate(0, -0.3px) skewX(0.15deg); }
+  40% { transform: translate(0.4px, 0) skewX(-0.2deg); }
+  50% { transform: translate(-0.2px, 0.1px) skewX(0.1deg); }
+  60% { transform: translate(0.3px, -0.2px) skewX(-0.15deg); }
+  70% { transform: translate(-0.4px, 0) skewX(0.2deg); }
+  80% { transform: translate(0.1px, 0.3px) skewX(-0.1deg); }
+  90% { transform: translate(-0.1px, -0.1px) skewX(0.05deg); }
+}
+
+/* Click ripple */
+@keyframes click-ripple {
+  0% { transform: scale(0); opacity: 0.6; }
+  100% { transform: scale(4); opacity: 0; }
+}
+
+/* Signature moment freeze */
+@keyframes consciousness-pulse {
+  0%, 100% { opacity: 0; }
+  50% { opacity: 1; }
+}
+
+/* Letter emergence */
+@keyframes letter-emerge {
+  0% { opacity: 0; transform: translateY(20px) scale(0.8); filter: blur(8px); }
+  50% { opacity: 0.6; transform: translateY(5px) scale(1.02); filter: blur(2px); }
+  100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+}
+
+/* Floating drift */
+@keyframes float-drift {
+  0%, 100% { transform: translate(0, 0) rotate(0deg); }
+  25% { transform: translate(5px, -8px) rotate(1deg); }
+  50% { transform: translate(-3px, -12px) rotate(-0.5deg); }
+  75% { transform: translate(7px, -5px) rotate(0.8deg); }
+}
+
+/* Slow orbit */
+@keyframes slow-orbit {
+  0% { transform: rotate(0deg) translateX(10px) rotate(0deg); }
+  100% { transform: rotate(360deg) translateX(10px) rotate(-360deg); }
+}
+
+/* ============================
+   OVERLAYS
+   ============================ */
 
 .noise-overlay {
   position: fixed;
@@ -170,8 +223,12 @@ body {
   background: linear-gradient(90deg, transparent, var(--gold-dim), transparent);
   z-index: 9998;
   animation: scan-line 8s linear infinite;
-  opacity: 0.25;
+  opacity: 0.2;
 }
+
+/* ============================
+   UTILITY CLASSES
+   ============================ */
 
 .text-gradient-gold {
   background: linear-gradient(135deg, var(--gold-dim), var(--gold), var(--gold-bright));
@@ -186,6 +243,41 @@ body {
   background: linear-gradient(90deg, transparent, var(--gold), transparent);
 }
 
+/* TEXT STATES - driven by CSS var from SystemMood */
+.text-state-normal {
+  filter: none;
+  opacity: 1;
+  transition: filter 0.8s ease, opacity 0.8s ease;
+}
+
+.text-state-memory {
+  animation: text-memory-drift 3s ease-in-out infinite;
+  transition: filter 0.3s ease, opacity 0.3s ease;
+}
+
+.text-state-recollection {
+  animation: text-recollection 0.5s ease-in-out infinite;
+  transition: filter 0.3s ease, opacity 0.3s ease;
+}
+
+/* Delayed response - adds 150ms latency feel */
+.delayed-response {
+  transition: all 0.15s ease 0.15s;
+}
+
+/* Click ripple container */
+.click-ripple-ring {
+  position: fixed;
+  width: 20px;
+  height: 20px;
+  border: 1px solid var(--gold);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9997;
+  animation: click-ripple 0.6s ease-out forwards;
+}
+
+/* Card premium */
 .card-premium {
   background: linear-gradient(135deg, rgba(17,24,32,0.8), rgba(11,15,20,0.9));
   border: 1px solid rgba(176,141,87,0.08);
@@ -197,6 +289,29 @@ body {
   border-color: rgba(176,141,87,0.25);
   box-shadow: 0 8px 40px rgba(0,0,0,0.3), 0 0 80px rgba(176,141,87,0.04);
   transform: translateY(-2px);
+}
+
+/* Signature moment overlay */
+.signature-freeze {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(11,15,20,0.3);
+  backdrop-filter: blur(2px);
+  animation: consciousness-pulse 3s ease-in-out;
+}
+
+.signature-freeze-text {
+  font-family: var(--font-serif);
+  font-size: clamp(1.5rem, 4vw, 3rem);
+  color: var(--gold);
+  text-align: center;
+  letter-spacing: 0.1em;
+  text-shadow: 0 0 40px rgba(176,141,87,0.3);
 }
 
 @media (max-width: 768px) {
