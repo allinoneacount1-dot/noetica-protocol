@@ -60,7 +60,7 @@ export default function SynapseMarketPage() {
         </div>
       </section>
 
-      <section className="relative py-24 px-6">
+      <section className="relative py-24 md:py-32 px-6 md:px-12 lg:px-20">
         <div className="max-w-6xl mx-auto">
           <div className="space-y-4">
             {copy.synapseMarket.artifacts.map((artifact, i) => (
@@ -213,7 +213,7 @@ export default function SynapseMarketPage() {
         </div>
       </section>
 
-      <section className="relative py-24 px-6 border-t" style={{ borderColor: "rgba(176,141,87,0.1)" }}>
+      <section className="relative py-24 md:py-32 px-6 border-t" style={{ borderColor: "rgba(176,141,87,0.1)" }}>
         <div className="max-w-4xl mx-auto text-center">
           <motion.h2
             initial={{ opacity: 0 }}

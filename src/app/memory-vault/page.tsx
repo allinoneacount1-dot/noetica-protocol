@@ -66,9 +66,9 @@ export default function MemoryVaultPage() {
         </div>
       </section>
 
-      <section className="relative py-24 px-6">
+      <section className="relative py-24 md:py-32 px-6 md:px-12 lg:px-20">
         <div className="max-w-6xl mx-auto">
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
             {copy.memoryVault.fragments.map((fragment, i) => (
               <motion.div
                 key={fragment.id}
@@ -89,7 +89,7 @@ export default function MemoryVaultPage() {
         </div>
       </section>
 
-      <section className="relative py-24 px-6 border-t" style={{ borderColor: "rgba(176,141,87,0.1)" }}>
+      <section className="relative py-24 md:py-32 px-6 border-t" style={{ borderColor: "rgba(176,141,87,0.1)" }}>
         <div className="max-w-4xl mx-auto text-center">
           <motion.p
             initial={{ opacity: 0 }}

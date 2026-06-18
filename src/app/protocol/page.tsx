@@ -1,6 +1,6 @@
 "use client";
-import { motion, useScroll, useTransform } from "framer-motion";
-import { useRef, useState } from "react";
+import { motion } from "framer-motion";
+import { useState } from "react";
 import ProtocolNav from "@/components/navigation/ProtocolNav";
 import GlitchText from "@/components/ui/GlitchText";
 import { copy } from "@/lib/theme";
@@ -8,28 +8,25 @@ import { copy } from "@/lib/theme";
 const layers = copy.protocol.layers;
 
 export default function ProtocolPage() {
-  const containerRef = useRef<HTMLDivElement>(null);
   const [activeLayer, setActiveLayer] = useState<number | null>(null);
 
   return (
-    <div ref={containerRef} className="min-h-screen" style={{ background: "var(--carbon)" }}>
+    <div className="min-h-screen" style={{ background: "var(--carbon)" }}>
       <ProtocolNav />
 
-      <section className="relative h-screen flex items-center justify-center px-6 pt-20">
-        <div className="absolute inset-0 overflow-hidden">
-          {[...Array(20)].map((_, i) => (
+      <section className="relative min-h-screen flex items-center justify-center px-6 pt-20">
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          {[...Array(15)].map((_, i) => (
             <motion.div
               key={i}
-              className="absolute"
+              className="absolute w-px h-px"
               style={{
                 left: `${Math.random() * 100}%`,
                 top: `${Math.random() * 100}%`,
-                width: 1,
-                height: 1,
                 background: "var(--gold)",
               }}
               animate={{
-                opacity: [0, 0.3, 0],
+                opacity: [0, 0.4, 0],
                 scale: [0, 1, 0],
               }}
               transition={{
@@ -46,7 +43,7 @@ export default function ProtocolPage() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.3 }}
-            className="text-xs tracking-[0.4em] uppercase mb-6"
+            className="text-[10px] tracking-[0.4em] uppercase mb-6"
             style={{ fontFamily: "var(--font-mono)", color: "var(--gold)" }}
           >
             ⟐ {copy.protocol.subtitle}
@@ -60,12 +57,12 @@ export default function ProtocolPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6 }}
-            className="text-base md:text-lg max-w-2xl mx-auto"
+            className="text-sm md:text-base max-w-2xl mx-auto"
             style={{
               fontFamily: "var(--font-serif)",
               fontStyle: "italic",
               color: "var(--bone-dim)",
-              lineHeight: 1.8,
+              lineHeight: 1.9,
             }}
           >
             {copy.protocol.description}
@@ -73,52 +70,60 @@ export default function ProtocolPage() {
         </div>
       </section>
 
-      <section className="relative min-h-screen py-24 px-6">
-        <div className="max-w-6xl mx-auto">
-          <div className="grid md:grid-cols-2 gap-16 items-center">
+      <section className="relative py-24 md:py-32 px-6 md:px-12 lg:px-20">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid md:grid-cols-2 gap-16 lg:gap-24 items-start">
             <div>
               <motion.h2
-                initial={{ opacity: 0, x: -30 }}
+                initial={{ opacity: 0, x: -20 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
-                className="text-3xl md:text-4xl mb-12"
+                className="text-3xl md:text-4xl mb-10"
                 style={{ fontFamily: "var(--font-serif)", color: "var(--bone)" }}
               >
                 Intelligence Layers
               </motion.h2>
 
-              <div className="space-y-4">
+              <div className="space-y-3">
                 {layers.map((layer, i) => (
                   <motion.div
                     key={i}
-                    className="p-6 border cursor-none transition-all duration-500"
+                    className="p-5 md:p-6 border cursor-none transition-all duration-500"
                     style={{
                       borderColor:
-                        activeLayer === i ? "var(--gold)" : "rgba(176,141,87,0.1)",
+                        activeLayer === i
+                          ? "var(--gold)"
+                          : "rgba(176,141,87,0.1)",
                       background:
-                        activeLayer === i ? "rgba(176,141,87,0.05)" : "transparent",
+                        activeLayer === i
+                          ? "rgba(176,141,87,0.04)"
+                          : "transparent",
                     }}
                     onMouseEnter={() => setActiveLayer(i)}
                     onMouseLeave={() => setActiveLayer(null)}
-                    initial={{ opacity: 0, x: -30 }}
+                    initial={{ opacity: 0, x: -20 }}
                     whileInView={{ opacity: 1, x: 0 }}
                     viewport={{ once: true }}
-                    transition={{ delay: i * 0.15 }}
-                    whileHover={{ x: 8 }}
+                    transition={{ delay: i * 0.1, duration: 0.5 }}
+                    whileHover={{ x: 6 }}
                   >
                     <div className="flex items-start gap-4">
                       <span
-                        className="text-xs mt-1 shrink-0"
+                        className="text-xs mt-0.5 shrink-0"
                         style={{
                           fontFamily: "var(--font-mono)",
-                          color: activeLayer === i ? "var(--gold)" : "var(--glacial-dim)",
+                          color:
+                            activeLayer === i
+                              ? "var(--gold)"
+                              : "var(--glacial-dim)",
+                          transition: "color 0.3s",
                         }}
                       >
                         {String(i + 1).padStart(2, "0")}
                       </span>
                       <div>
                         <h3
-                          className="text-lg mb-2"
+                          className="text-base md:text-lg mb-1"
                           style={{
                             fontFamily: "var(--font-serif)",
                             color: "var(--bone)",
@@ -127,10 +132,11 @@ export default function ProtocolPage() {
                           {layer.name}
                         </h3>
                         <p
-                          className="text-sm"
+                          className="text-xs md:text-sm"
                           style={{
                             fontFamily: "var(--font-sans)",
                             color: "var(--glacial-dim)",
+                            lineHeight: 1.6,
                           }}
                         >
                           {layer.desc}
@@ -142,14 +148,14 @@ export default function ProtocolPage() {
               </div>
             </div>
 
-            <div className="relative">
-              <motion.div
-                className="aspect-square relative"
-                initial={{ opacity: 0, scale: 0.8 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 1 }}
-              >
+            <motion.div
+              className="relative hidden md:flex items-center justify-center"
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8 }}
+            >
+              <div className="aspect-square w-full max-w-md relative">
                 {[...Array(4)].map((_, i) => (
                   <motion.div
                     key={i}
@@ -158,7 +164,7 @@ export default function ProtocolPage() {
                       borderColor:
                         activeLayer === i
                           ? "var(--gold)"
-                          : "rgba(176,141,87,0.15)",
+                          : "rgba(176,141,87,0.12)",
                       top: `${10 + i * 15}%`,
                       left: `${10 + i * 15}%`,
                       right: `${10 + i * 15}%`,
@@ -168,6 +174,7 @@ export default function ProtocolPage() {
                     animate={{
                       rotate: activeLayer === i ? 45 : i * 5,
                     }}
+                    transition={{ duration: 0.8, ease: "easeInOut" }}
                   />
                 ))}
 
@@ -193,20 +200,41 @@ export default function ProtocolPage() {
                     style={{
                       top: "50%",
                       left: "50%",
-                      width: "1px",
-                      height: `${30 + i * 10}%`,
+                      width: 1,
+                      height: `${25 + i * 10}%`,
                       background: "var(--gold-dim)",
                       transformOrigin: "top center",
                     }}
                     animate={{
                       rotate: activeLayer === i ? i * 90 : i * 90 + 10,
-                      opacity: activeLayer === i ? 0.8 : 0.2,
+                      opacity: activeLayer === i ? 0.8 : 0.15,
                     }}
-                    transition={{ duration: 0.8 }}
+                    transition={{ duration: 0.6 }}
                   />
                 ))}
-              </motion.div>
-            </div>
+
+                {[0, 1, 2, 3].map((i) => (
+                  <motion.div
+                    key={`label-${i}`}
+                    className="absolute text-[10px] tracking-widest uppercase"
+                    style={{
+                      fontFamily: "var(--font-mono)",
+                      color:
+                        activeLayer === i
+                          ? "var(--gold)"
+                          : "var(--glacial-dim)",
+                      top: i < 2 ? `${8 + i * 15}%` : "auto",
+                      bottom: i >= 2 ? `${8 + (3 - i) * 15}%` : "auto",
+                      left: i % 2 === 0 ? "5%" : "auto",
+                      right: i % 2 === 1 ? "5%" : "auto",
+                      transition: "color 0.3s",
+                    }}
+                  >
+                    {layers[i]?.name}
+                  </motion.div>
+                ))}
+              </div>
+            </motion.div>
           </div>
         </div>
       </section>
