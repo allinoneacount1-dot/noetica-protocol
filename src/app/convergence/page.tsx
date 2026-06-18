@@ -1,8 +1,7 @@
 "use client";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, useScroll } from "framer-motion";
 import { useRef, useEffect, useState } from "react";
 import ProtocolNav from "@/components/navigation/ProtocolNav";
-import GlitchText from "@/components/ui/GlitchText";
 import { copy } from "@/lib/theme";
 
 function ConvergenceField() {
@@ -24,14 +23,8 @@ function ConvergenceField() {
     window.addEventListener("resize", resize);
 
     interface Node {
-      x: number;
-      y: number;
-      vx: number;
-      vy: number;
-      baseX: number;
-      baseY: number;
-      size: number;
-      hue: number;
+      x: number; y: number; vx: number; vy: number;
+      baseX: number; baseY: number; size: number; hue: number;
     }
 
     const nodes: Node[] = [];
@@ -39,12 +32,10 @@ function ConvergenceField() {
       const x = Math.random() * canvas.width;
       const y = Math.random() * canvas.height;
       nodes.push({
-        x,
-        y,
+        x, y,
         vx: (Math.random() - 0.5) * 0.5,
         vy: (Math.random() - 0.5) * 0.5,
-        baseX: x,
-        baseY: y,
+        baseX: x, baseY: y,
         size: Math.random() * 2 + 1,
         hue: Math.random() * 40 + 25,
       });
@@ -55,7 +46,6 @@ function ConvergenceField() {
       ctx.fillStyle = "rgba(11, 15, 20, 0.05)";
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      const scrollInfluence = scrollRef.current;
       const mx = mouseRef.current.x;
       const my = mouseRef.current.y;
 
@@ -74,13 +64,12 @@ function ConvergenceField() {
         node.vy += (node.baseY - node.y) * 0.005;
         node.vx += Math.sin(Date.now() * 0.001 + i) * 0.02;
         node.vy += Math.cos(Date.now() * 0.001 + i) * 0.02;
-
         node.vx *= 0.98;
         node.vy *= 0.98;
         node.x += node.vx;
         node.y += node.vy;
 
-        const alpha = 0.3 + scrollInfluence * 0.4;
+        const alpha = 0.3 + scrollRef.current * 0.4;
         ctx.beginPath();
         ctx.arc(node.x, node.y, node.size, 0, Math.PI * 2);
         ctx.fillStyle = `hsla(${node.hue}, 50%, 55%, ${alpha})`;
@@ -143,9 +132,6 @@ export default function ConvergencePage() {
     return () => unsubscribe();
   }, [scrollYProgress]);
 
-  const hueShift = currentScroll * 30;
-  const saturation = 30 + currentScroll * 20;
-
   return (
     <div ref={containerRef} className="relative" style={{ background: "var(--carbon)" }}>
       <ProtocolNav />
@@ -154,12 +140,12 @@ export default function ConvergencePage() {
       <div
         className="fixed inset-0 z-[1] pointer-events-none"
         style={{
-          background: `radial-gradient(ellipse at 50% 50%, hsla(${38 + hueShift}, ${saturation}%, 30%, 0.08) 0%, transparent 60%)`,
+          background: `radial-gradient(ellipse at 50% 50%, hsla(38, 30%, 30%, 0.08) 0%, transparent 60%)`,
         }}
       />
 
-      <section className="relative z-10 h-screen flex items-center justify-center px-6">
-        <div className="max-w-4xl text-center">
+      <section className="relative z-10 min-h-[100dvh] flex items-center justify-center px-6">
+        <div className="max-w-3xl text-center">
           <motion.p
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -167,18 +153,22 @@ export default function ConvergencePage() {
             className="text-[10px] tracking-[0.4em] uppercase mb-6"
             style={{ fontFamily: "var(--font-mono)", color: "var(--gold)" }}
           >
-            ⟐ LIVING ENVIRONMENT
+            Living Environment
           </motion.p>
-          <GlitchText
-            text={copy.convergence.title}
-            as="h1"
-            className="text-5xl md:text-7xl mb-8"
-          />
+          <motion.h1
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5, duration: 0.8 }}
+            className="text-5xl md:text-7xl mb-6 leading-[1.05]"
+            style={{ fontFamily: "var(--font-serif)", color: "var(--bone)" }}
+          >
+            Convergence Room
+          </motion.h1>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.6 }}
-            className="text-sm md:text-base max-w-2xl mx-auto"
+            transition={{ delay: 0.7 }}
+            className="text-sm md:text-base max-w-xl mx-auto mb-12"
             style={{
               fontFamily: "var(--font-serif)",
               fontStyle: "italic",
@@ -190,7 +180,7 @@ export default function ConvergencePage() {
           </motion.p>
 
           <motion.div
-            className="mt-12 flex items-center justify-center gap-6"
+            className="flex items-center justify-center gap-8"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 1 }}
@@ -228,16 +218,16 @@ export default function ConvergencePage() {
         </div>
       </section>
 
-      <section className="relative z-10 h-screen flex items-center justify-center px-6">
+      <section className="relative z-10 min-h-[100dvh] flex items-center justify-center px-6">
         <motion.div
-          className="max-w-3xl text-center"
+          className="max-w-2xl text-center"
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.5 }}
           transition={{ duration: 0.8 }}
         >
           <h2
-            className="text-3xl md:text-5xl mb-6 leading-snug"
+            className="text-3xl md:text-5xl mb-6 leading-[1.15]"
             style={{ fontFamily: "var(--font-serif)", color: "var(--bone)" }}
           >
             The field responds to your presence
@@ -251,22 +241,22 @@ export default function ConvergencePage() {
             }}
           >
             Every movement of your cursor influences the neural network. Every
-            scroll deepens the convergence. You are not observing—you are
+            scroll deepens the convergence. You are not observing — you are
             creating.
           </p>
         </motion.div>
       </section>
 
-      <section className="relative z-10 h-screen flex items-center justify-center px-6">
+      <section className="relative z-10 min-h-[100dvh] flex items-center justify-center px-6">
         <motion.div
-          className="max-w-3xl text-center"
+          className="max-w-2xl text-center"
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.5 }}
           transition={{ duration: 0.8 }}
         >
           <h2
-            className="text-3xl md:text-5xl mb-6 leading-snug"
+            className="text-3xl md:text-5xl mb-6 leading-[1.15]"
             style={{ fontFamily: "var(--font-serif)", color: "var(--bone)" }}
           >
             Full convergence achieved
@@ -286,13 +276,16 @@ export default function ConvergencePage() {
         </motion.div>
       </section>
 
-      <section className="relative z-10 py-24 px-6 border-t" style={{ borderColor: "rgba(176,141,87,0.1)" }}>
+      <section
+        className="relative z-10 py-24 px-6 border-t"
+        style={{ borderColor: "rgba(176,141,87,0.1)" }}
+      >
         <div className="max-w-4xl mx-auto text-center">
           <p
             className="text-[10px] tracking-[0.3em] uppercase mb-4"
             style={{ fontFamily: "var(--font-mono)", color: "var(--glacial-dim)" }}
           >
-            CONVERGENCE STATUS
+            Convergence Status
           </p>
           <p
             className="text-4xl md:text-6xl"
@@ -302,7 +295,7 @@ export default function ConvergencePage() {
           </p>
           <p
             className="mt-4 text-sm"
-            style={{ fontFamily: "var(--font-serif)", color: "var(--bone-dim)" }}
+            style={{ fontFamily: "var(--font-serif)", fontStyle: "italic", color: "var(--bone-dim)" }}
           >
             collective consciousness level
           </p>

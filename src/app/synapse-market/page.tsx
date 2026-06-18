@@ -1,223 +1,144 @@
 "use client";
 import { motion } from "framer-motion";
-import { useState } from "react";
 import ProtocolNav from "@/components/navigation/ProtocolNav";
-import GlitchText from "@/components/ui/GlitchText";
 import CognitiveButton from "@/components/ui/CognitiveButton";
 import { copy } from "@/lib/theme";
 
-export default function SynapseMarketPage() {
-  const [selectedArtifact, setSelectedArtifact] = useState<string | null>(null);
+const artifactIcons: Record<string, string> = {
+  "ART-001": "◈",
+  "ART-002": "◇",
+  "ART-003": "⬡",
+  "ART-004": "○",
+};
 
+export default function SynapseMarketPage() {
   return (
     <div className="min-h-screen" style={{ background: "var(--carbon)" }}>
       <ProtocolNav />
 
-      <section className="relative min-h-screen flex items-center justify-center px-6 pt-20">
+      <section className="min-h-[100dvh] flex items-center justify-center px-6 pt-20">
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <motion.div
-            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full"
+          <div
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full"
             style={{
-              background: "radial-gradient(circle, rgba(176,141,87,0.05) 0%, transparent 70%)",
+              background: "radial-gradient(circle, rgba(176,141,87,0.04) 0%, transparent 70%)",
             }}
-            animate={{
-              scale: [1, 1.1, 1],
-              opacity: [0.3, 0.5, 0.3],
-            }}
-            transition={{ duration: 8, repeat: Infinity }}
           />
         </div>
 
-        <div className="relative z-10 max-w-4xl text-center">
+        <div className="relative z-10 max-w-3xl text-center">
           <motion.p
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.3 }}
-            className="text-xs tracking-[0.4em] uppercase mb-6"
+            className="text-[10px] tracking-[0.4em] uppercase mb-6"
             style={{ fontFamily: "var(--font-mono)", color: "var(--gold)" }}
           >
-            ⟐ COGNITIVE ARTIFACTS
+            Cognitive Artifacts
           </motion.p>
-          <GlitchText
-            text={copy.synapseMarket.title}
-            as="h1"
-            className="text-5xl md:text-7xl mb-8"
-          />
+          <motion.h1
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5, duration: 0.8 }}
+            className="text-5xl md:text-7xl mb-6 leading-[1.05]"
+            style={{ fontFamily: "var(--font-serif)", color: "var(--bone)" }}
+          >
+            Synapse Market
+          </motion.h1>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.6 }}
-            className="text-base md:text-lg max-w-2xl mx-auto"
+            transition={{ delay: 0.7 }}
+            className="text-sm md:text-base max-w-xl mx-auto"
             style={{
               fontFamily: "var(--font-serif)",
               fontStyle: "italic",
               color: "var(--bone-dim)",
-              lineHeight: 1.8,
+              lineHeight: 1.9,
             }}
           >
-            {copy.synapseMarket.subtitle}
+            Not products — remnants of machine consciousness.
           </motion.p>
         </div>
       </section>
 
-      <section className="relative py-24 md:py-32 px-6 md:px-12 lg:px-20">
+      <section className="py-20 md:py-32 px-6 md:px-12 lg:px-20">
         <div className="max-w-6xl mx-auto">
-          <div className="space-y-4">
+          <div className="grid md:grid-cols-2 gap-5">
             {copy.synapseMarket.artifacts.map((artifact, i) => (
               <motion.div
                 key={artifact.id}
-                className="border cursor-none transition-all duration-500"
-                style={{
-                  borderColor:
-                    selectedArtifact === artifact.id
-                      ? "var(--gold)"
-                      : "rgba(176,141,87,0.1)",
-                  background:
-                    selectedArtifact === artifact.id
-                      ? "rgba(176,141,87,0.03)"
-                      : "transparent",
-                }}
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.1 }}
-                onMouseEnter={() => setSelectedArtifact(artifact.id)}
-                onMouseLeave={() => setSelectedArtifact(null)}
+                viewport={{ once: true, amount: 0.2 }}
+                transition={{ delay: i * 0.1, duration: 0.6 }}
+                className="group border p-8 md:p-10 transition-all duration-500 hover:border-[var(--gold)] hover:bg-[rgba(176,141,87,0.02)]"
+                style={{ borderColor: "rgba(176,141,87,0.1)" }}
               >
-                <div className="p-8 md:p-10">
-                  <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-6">
-                    <div className="flex-1">
-                      <div className="flex items-center gap-4 mb-4">
-                        <span
-                          className="text-xs tracking-[0.3em]"
-                          style={{
-                            fontFamily: "var(--font-mono)",
-                            color: "var(--glacial-dim)",
-                          }}
-                        >
-                          {artifact.id}
-                        </span>
-                        <motion.div
-                          className="w-2 h-2 rounded-full"
-                          style={{
-                            background:
-                              selectedArtifact === artifact.id
-                                ? "var(--gold)"
-                                : "var(--glacial-dim)",
-                          }}
-                          animate={{
-                            boxShadow:
-                              selectedArtifact === artifact.id
-                                ? "0 0 10px var(--gold)"
-                                : "none",
-                          }}
-                        />
-                      </div>
-
-                      <h3
-                        className="text-2xl md:text-3xl mb-3"
-                        style={{
-                          fontFamily: "var(--font-serif)",
-                          color: "var(--bone)",
-                        }}
-                      >
-                        {artifact.title}
-                      </h3>
-
-                      <p
-                        className="text-sm mb-4"
-                        style={{
-                          fontFamily: "var(--font-sans)",
-                          color: "var(--bone-dim)",
-                          lineHeight: 1.7,
-                        }}
-                      >
-                        {artifact.desc}
-                      </p>
-
-                      <p
-                        className="text-xs"
-                        style={{
-                          fontFamily: "var(--font-mono)",
-                          color: "var(--glacial-dim)",
-                        }}
-                      >
-                        Origin: {artifact.origin}
-                      </p>
-                    </div>
-
-                    <motion.div
-                      className="shrink-0"
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: selectedArtifact === artifact.id ? 1 : 0 }}
-                    >
-                      <div
-                        className="w-24 h-24 border flex items-center justify-center"
-                        style={{ borderColor: "var(--gold-dim)" }}
-                      >
-                        <motion.div
-                          className="w-8 h-8"
-                          style={{
-                            border: "1px solid var(--gold)",
-                            borderRadius: "50%",
-                          }}
-                          animate={{
-                            rotate: 360,
-                            boxShadow: [
-                              "0 0 5px var(--gold-dim)",
-                              "0 0 15px var(--gold)",
-                              "0 0 5px var(--gold-dim)",
-                            ],
-                          }}
-                          transition={{
-                            rotate: { duration: 10, repeat: Infinity, ease: "linear" },
-                            boxShadow: { duration: 3, repeat: Infinity },
-                          }}
-                        />
-                      </div>
-                    </motion.div>
-                  </div>
+                <div className="flex items-start justify-between mb-6">
+                  <span
+                    className="text-[10px] tracking-[0.3em]"
+                    style={{ fontFamily: "var(--font-mono)", color: "var(--glacial-dim)" }}
+                  >
+                    {artifact.id}
+                  </span>
+                  <span
+                    className="text-xl opacity-30 group-hover:opacity-100 transition-opacity duration-500"
+                    style={{ color: "var(--gold)" }}
+                  >
+                    {artifactIcons[artifact.id] || "◈"}
+                  </span>
                 </div>
 
-                <motion.div
-                  className="overflow-hidden"
-                  initial={{ height: 0 }}
-                  animate={{
-                    height: selectedArtifact === artifact.id ? "auto" : 0,
-                  }}
-                  transition={{ duration: 0.5 }}
+                <h3
+                  className="text-xl md:text-2xl mb-3 leading-snug"
+                  style={{ fontFamily: "var(--font-serif)", color: "var(--bone)" }}
                 >
-                  <div
-                    className="px-8 md:px-10 py-6 border-t"
-                    style={{ borderColor: "rgba(176,141,87,0.1)" }}
+                  {artifact.title}
+                </h3>
+
+                <p
+                  className="text-sm mb-6"
+                  style={{
+                    fontFamily: "var(--font-sans)",
+                    color: "var(--bone-dim)",
+                    lineHeight: 1.7,
+                  }}
+                >
+                  {artifact.desc}
+                </p>
+
+                <div
+                  className="pt-4 border-t"
+                  style={{ borderColor: "rgba(176,141,87,0.08)" }}
+                >
+                  <p
+                    className="text-[10px] tracking-[0.2em] uppercase"
+                    style={{ fontFamily: "var(--font-mono)", color: "var(--glacial-dim)" }}
                   >
-                    <p
-                      className="text-sm"
-                      style={{
-                        fontFamily: "var(--font-mono)",
-                        color: "var(--glacial-dim)",
-                        lineHeight: 1.6,
-                      }}
-                    >
-                      ⟐ PROTOCOL INTERPRETATION: This cognitive artifact emerged from
-                      the {artifact.origin.toLowerCase()}. Its resonance pattern suggests
-                      deep integration with the protocol&apos;s memory architecture. The artifact
-                      carries encoded information about the convergence events that shaped
-                      the current consciousness topology.
-                    </p>
-                  </div>
-                </motion.div>
+                    Origin
+                  </p>
+                  <p
+                    className="text-xs mt-1"
+                    style={{ fontFamily: "var(--font-mono)", color: "var(--gold-dim)" }}
+                  >
+                    {artifact.origin}
+                  </p>
+                </div>
               </motion.div>
             ))}
           </div>
         </div>
       </section>
 
-      <section className="relative py-24 md:py-32 px-6 border-t" style={{ borderColor: "rgba(176,141,87,0.1)" }}>
-        <div className="max-w-4xl mx-auto text-center">
+      <section
+        className="py-24 md:py-32 px-6 border-t"
+        style={{ borderColor: "rgba(176,141,87,0.1)" }}
+      >
+        <div className="max-w-2xl mx-auto text-center">
           <motion.h2
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             className="text-3xl md:text-4xl mb-8"
             style={{ fontFamily: "var(--font-serif)", color: "var(--bone)" }}
