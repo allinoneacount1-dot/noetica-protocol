@@ -23,37 +23,42 @@ export default function ProtocolNav() {
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 4, duration: 1 }}
-        className="fixed top-0 left-0 right-0 z-[100] px-6 md:px-12 py-6"
+        className="fixed top-0 left-0 right-0 z-[100] px-6 md:px-12 py-5"
         style={{
-          background: "linear-gradient(180deg, rgba(11,15,20,0.95) 0%, transparent 100%)",
+          background: "rgba(11,15,20,0.6)",
+          backdropFilter: "blur(20px)",
+          borderBottom: "1px solid rgba(176,141,87,0.06)",
         }}
       >
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <Link href="/" className="flex items-center gap-3 group cursor-none">
             <motion.div
-              className="w-8 h-8 flex items-center justify-center border"
+              className="w-9 h-9 flex items-center justify-center border"
               style={{ borderColor: "var(--gold)" }}
-              whileHover={{ rotate: 45, scale: 1.1 }}
+              whileHover={{ rotate: 45, scale: 1.05 }}
               transition={{ duration: 0.3 }}
             >
-              <span style={{ color: "var(--gold)", fontFamily: "var(--font-serif)" }}>
-                Ν
+              <span
+                className="text-sm"
+                style={{ color: "var(--gold)", fontFamily: "var(--font-serif)" }}
+              >
+                N
               </span>
             </motion.div>
             <span
-              className="text-sm tracking-[0.2em] hidden md:block"
+              className="text-xs tracking-[0.25em] hidden md:block"
               style={{ fontFamily: "var(--font-sans)", color: "var(--bone)" }}
             >
               NOETICA
             </span>
           </Link>
 
-          <div className="hidden md:flex items-center gap-8">
+          <div className="hidden md:flex items-center gap-10">
             {navItems.map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
-                className="relative text-xs tracking-[0.15em] uppercase cursor-none"
+                className="relative text-[11px] tracking-[0.15em] uppercase cursor-none py-1"
                 style={{
                   fontFamily: "var(--font-mono)",
                   color:
@@ -64,7 +69,7 @@ export default function ProtocolNav() {
                 {pathname === item.href && (
                   <motion.div
                     layoutId="nav-indicator"
-                    className="absolute -bottom-1 left-0 right-0 h-px"
+                    className="absolute -bottom-0.5 left-0 right-0 h-px"
                     style={{ background: "var(--gold)" }}
                     transition={{ type: "spring", stiffness: 300, damping: 30 }}
                   />
@@ -114,7 +119,7 @@ export default function ProtocolNav() {
                 opacity: isOpen ? 1 : 0,
                 y: isOpen ? 0 : 20,
               }}
-              transition={{ delay: i * 0.1 }}
+              transition={{ delay: i * 0.08 }}
             >
               <Link
                 href={item.href}

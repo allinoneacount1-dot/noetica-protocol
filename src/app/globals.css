@@ -3,7 +3,7 @@
 
 :root {
   --carbon: #0B0F14;
-  --carbon-light: #131920;
+  --carbon-light: #111820;
   --carbon-mid: #1a2130;
   --gold: #B08D57;
   --gold-dim: #8a6d3f;
@@ -124,11 +124,6 @@ body {
   100% { opacity: 1; transform: translateY(0); }
 }
 
-@keyframes typewriter {
-  0% { width: 0; }
-  100% { width: 100%; }
-}
-
 @keyframes blink-caret {
   0%, 100% { border-color: transparent; }
   50% { border-color: var(--gold); }
@@ -139,16 +134,31 @@ body {
   50% { box-shadow: 0 0 20px var(--gold), 0 0 40px var(--gold-dim); }
 }
 
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes grain {
+  0%, 100% { transform: translate(0, 0); }
+  10% { transform: translate(-5%, -10%); }
+  30% { transform: translate(3%, -15%); }
+  50% { transform: translate(12%, 9%); }
+  70% { transform: translate(9%, 4%); }
+  90% { transform: translate(-1%, 7%); }
+}
+
 .noise-overlay {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
   pointer-events: none;
   z-index: 9999;
-  opacity: 0.03;
+  opacity: 0.025;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  animation: grain 8s steps(10) infinite;
 }
 
 .scan-line {
@@ -156,11 +166,11 @@ body {
   top: 0;
   left: 0;
   width: 100%;
-  height: 2px;
+  height: 1px;
   background: linear-gradient(90deg, transparent, var(--gold-dim), transparent);
   z-index: 9998;
   animation: scan-line 8s linear infinite;
-  opacity: 0.3;
+  opacity: 0.25;
 }
 
 .text-gradient-gold {
@@ -170,21 +180,23 @@ body {
   background-clip: text;
 }
 
-.border-glow {
-  border: 1px solid rgba(176, 141, 87, 0.2);
-  box-shadow: 0 0 15px rgba(176, 141, 87, 0.05);
+.section-divider {
+  width: 60px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
 }
 
-.border-glow:hover {
-  border-color: rgba(176, 141, 87, 0.4);
-  box-shadow: 0 0 25px rgba(176, 141, 87, 0.1);
+.card-premium {
+  background: linear-gradient(135deg, rgba(17,24,32,0.8), rgba(11,15,20,0.9));
+  border: 1px solid rgba(176,141,87,0.08);
+  backdrop-filter: blur(10px);
+  transition: all 0.5s cubic-bezier(0.25, 0.1, 0.25, 1);
 }
 
-.landing-gradient {
-  background: radial-gradient(ellipse at 20% 50%, rgba(126, 155, 174, 0.08) 0%, transparent 50%),
-              radial-gradient(ellipse at 80% 20%, rgba(176, 141, 87, 0.06) 0%, transparent 50%),
-              radial-gradient(ellipse at 50% 80%, rgba(74, 63, 92, 0.05) 0%, transparent 50%),
-              var(--carbon);
+.card-premium:hover {
+  border-color: rgba(176,141,87,0.25);
+  box-shadow: 0 8px 40px rgba(0,0,0,0.3), 0 0 80px rgba(176,141,87,0.04);
+  transform: translateY(-2px);
 }
 
 @media (max-width: 768px) {

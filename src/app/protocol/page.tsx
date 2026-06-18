@@ -13,8 +13,9 @@ export default function ProtocolPage() {
     <div className="min-h-screen" style={{ background: "var(--carbon)" }}>
       <ProtocolNav />
 
-      <section className="min-h-[100dvh] flex items-center justify-center px-6 pt-20">
-        <div className="relative z-10 max-w-3xl text-center">
+      {/* HERO — Left-aligned */}
+      <section className="min-h-[100dvh] flex items-center px-6 md:px-16 lg:px-24 pt-24">
+        <div className="max-w-4xl">
           <motion.p
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -28,16 +29,18 @@ export default function ProtocolPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.5, duration: 0.8 }}
-            className="text-5xl md:text-7xl mb-6 leading-[1.05]"
+            className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl mb-8 leading-[1.0]"
             style={{ fontFamily: "var(--font-serif)", color: "var(--bone)" }}
           >
-            Intelligence Layers
+            Intelligence
+            <br />
+            <span style={{ color: "var(--glacial)" }}>Layers</span>
           </motion.h1>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.7 }}
-            className="text-sm md:text-base max-w-xl mx-auto"
+            className="text-sm md:text-base max-w-lg"
             style={{
               fontFamily: "var(--font-serif)",
               fontStyle: "italic",
@@ -50,17 +53,18 @@ export default function ProtocolPage() {
         </div>
       </section>
 
-      <section className="py-20 md:py-32 px-6 md:px-12 lg:px-20">
+      {/* LAYERS — Interactive visualization */}
+      <section className="py-20 md:py-32 px-6 md:px-16 lg:px-20">
         <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-16 lg:gap-24 items-start">
           <div>
             <div className="space-y-3">
               {layers.map((layer, i) => (
                 <motion.div
                   key={i}
-                  className="p-5 md:p-6 border transition-all duration-500 cursor-none"
+                  className="p-6 md:p-7 border transition-all duration-500 cursor-none group relative overflow-hidden"
                   style={{
-                    borderColor: activeLayer === i ? "var(--gold)" : "rgba(176,141,87,0.1)",
-                    background: activeLayer === i ? "rgba(176,141,87,0.04)" : "transparent",
+                    borderColor: activeLayer === i ? "var(--gold)" : "rgba(176,141,87,0.08)",
+                    background: activeLayer === i ? "rgba(176,141,87,0.03)" : "transparent",
                   }}
                   onMouseEnter={() => setActiveLayer(i)}
                   onMouseLeave={() => setActiveLayer(null)}
@@ -68,9 +72,17 @@ export default function ProtocolPage() {
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: i * 0.1, duration: 0.5 }}
-                  whileHover={{ x: 6 }}
+                  whileHover={{ x: 8 }}
                 >
-                  <div className="flex items-start gap-4">
+                  {/* Left accent */}
+                  <div
+                    className="absolute top-0 left-0 w-px h-full transition-opacity duration-500"
+                    style={{
+                      background: activeLayer === i ? "var(--gold)" : "rgba(176,141,87,0.08)",
+                      opacity: activeLayer === i ? 1 : 0,
+                    }}
+                  />
+                  <div className="flex items-start gap-5">
                     <span
                       className="text-xs mt-0.5 shrink-0"
                       style={{
@@ -83,17 +95,17 @@ export default function ProtocolPage() {
                     </span>
                     <div>
                       <h3
-                        className="text-base md:text-lg mb-1"
+                        className="text-lg md:text-xl mb-2"
                         style={{ fontFamily: "var(--font-serif)", color: "var(--bone)" }}
                       >
                         {layer.name}
                       </h3>
                       <p
-                        className="text-xs md:text-sm"
+                        className="text-sm"
                         style={{
                           fontFamily: "var(--font-sans)",
                           color: "var(--glacial-dim)",
-                          lineHeight: 1.6,
+                          lineHeight: 1.7,
                         }}
                       >
                         {layer.desc}
@@ -105,6 +117,7 @@ export default function ProtocolPage() {
             </div>
           </div>
 
+          {/* Visualization */}
           <motion.div
             className="relative hidden md:flex items-center justify-center"
             initial={{ opacity: 0, scale: 0.9 }}
@@ -116,15 +129,18 @@ export default function ProtocolPage() {
               {[...Array(4)].map((_, i) => (
                 <motion.div
                   key={i}
-                  className="absolute border transition-colors duration-500"
+                  className="absolute border transition-all duration-700"
                   style={{
-                    borderColor: activeLayer === i ? "var(--gold)" : "rgba(176,141,87,0.12)",
+                    borderColor: activeLayer === i ? "var(--gold)" : "rgba(176,141,87,0.08)",
                     top: `${10 + i * 15}%`,
                     left: `${10 + i * 15}%`,
                     right: `${10 + i * 15}%`,
                     bottom: `${10 + i * 15}%`,
                   }}
-                  animate={{ rotate: activeLayer === i ? 45 : i * 5 }}
+                  animate={{
+                    rotate: activeLayer === i ? 45 : i * 5,
+                    scale: activeLayer === i ? 1.02 : 1,
+                  }}
                   transition={{ duration: 0.8, ease: "easeInOut" }}
                 />
               ))}
@@ -136,7 +152,7 @@ export default function ProtocolPage() {
                   animate={{
                     boxShadow: [
                       "0 0 10px var(--gold)",
-                      "0 0 30px var(--gold), 0 0 60px rgba(176,141,87,0.3)",
+                      "0 0 40px var(--gold), 0 0 80px rgba(176,141,87,0.2)",
                       "0 0 10px var(--gold)",
                     ],
                   }}
@@ -153,8 +169,8 @@ export default function ProtocolPage() {
                     color: activeLayer === i ? "var(--gold)" : "var(--glacial-dim)",
                     top: i < 2 ? `${8 + i * 15}%` : "auto",
                     bottom: i >= 2 ? `${8 + (3 - i) * 15}%` : "auto",
-                    left: i % 2 === 0 ? "5%" : "auto",
-                    right: i % 2 === 1 ? "5%" : "auto",
+                    left: i % 2 === 0 ? "2%" : "auto",
+                    right: i % 2 === 1 ? "2%" : "auto",
                     transition: "color 0.3s",
                   }}
                 >

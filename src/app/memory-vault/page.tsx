@@ -1,7 +1,6 @@
 "use client";
 import { motion } from "framer-motion";
 import ProtocolNav from "@/components/navigation/ProtocolNav";
-import GlitchText from "@/components/ui/GlitchText";
 import { copy } from "@/lib/theme";
 
 const typeColors: Record<string, string> = {
@@ -18,8 +17,9 @@ export default function MemoryVaultPage() {
     <div className="min-h-screen" style={{ background: "var(--carbon)" }}>
       <ProtocolNav />
 
-      <section className="min-h-[100dvh] flex items-center justify-center px-6 pt-20">
-        <div className="relative z-10 max-w-3xl text-center">
+      {/* HERO — Centered large */}
+      <section className="min-h-[100dvh] flex items-center justify-center px-6 pt-24">
+        <div className="relative z-10 max-w-4xl text-center">
           <motion.p
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -33,10 +33,12 @@ export default function MemoryVaultPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.5, duration: 0.8 }}
-            className="text-5xl md:text-7xl mb-6 leading-[1.05]"
+            className="text-5xl sm:text-6xl md:text-7xl lg:text-[120px] mb-8 leading-[0.95]"
             style={{ fontFamily: "var(--font-serif)", color: "var(--bone)" }}
           >
-            Memory Vault
+            Memory
+            <br />
+            <span className="text-gradient-gold">Vault</span>
           </motion.h1>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -55,9 +57,10 @@ export default function MemoryVaultPage() {
         </div>
       </section>
 
-      <section className="py-20 md:py-32 px-6 md:px-12 lg:px-20">
+      {/* FRAGMENTS — Premium 3-col cards */}
+      <section className="py-20 md:py-32 px-6 md:px-16 lg:px-20">
         <div className="max-w-6xl mx-auto">
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
             {copy.memoryVault.fragments.map((fragment, i) => {
               const color = typeColors[fragment.type] || "var(--gold)";
               return (
@@ -67,10 +70,15 @@ export default function MemoryVaultPage() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, amount: 0.2 }}
                   transition={{ delay: i * 0.08, duration: 0.6 }}
-                  className="group border p-6 md:p-8 transition-all duration-500 hover:border-[var(--gold)] hover:bg-[rgba(176,141,87,0.02)]"
-                  style={{ borderColor: "rgba(176,141,87,0.1)" }}
+                  className="group card-premium p-6 md:p-8 cursor-none relative overflow-hidden"
                 >
-                  <div className="flex items-center justify-between mb-5">
+                  {/* Top accent line */}
+                  <div
+                    className="absolute top-0 left-0 w-full h-px opacity-30 group-hover:opacity-80 transition-opacity duration-500"
+                    style={{ background: `linear-gradient(90deg, ${color}, transparent)` }}
+                  />
+
+                  <div className="flex items-center justify-between mb-6">
                     <span
                       className="text-[10px] tracking-[0.3em]"
                       style={{ fontFamily: "var(--font-mono)", color: "var(--glacial-dim)" }}
@@ -78,11 +86,12 @@ export default function MemoryVaultPage() {
                       {fragment.id}
                     </span>
                     <span
-                      className="text-[10px] px-2 py-0.5 uppercase tracking-wider"
+                      className="text-[9px] px-2 py-1 uppercase tracking-wider"
                       style={{
                         fontFamily: "var(--font-mono)",
                         color,
-                        border: `1px solid ${color}30`,
+                        border: `1px solid ${color}20`,
+                        background: `${color}08`,
                       }}
                     >
                       {fragment.type}
@@ -90,15 +99,15 @@ export default function MemoryVaultPage() {
                   </div>
 
                   <h3
-                    className="text-lg md:text-xl mb-4 leading-snug"
+                    className="text-lg md:text-xl mb-5 leading-snug"
                     style={{ fontFamily: "var(--font-serif)", color: "var(--bone)" }}
                   >
                     {fragment.title}
                   </h3>
 
                   <div
-                    className="pt-4 border-t"
-                    style={{ borderColor: "rgba(176,141,87,0.08)" }}
+                    className="pt-4 border-t flex items-center justify-between"
+                    style={{ borderColor: "rgba(176,141,87,0.06)" }}
                   >
                     <span
                       className="text-[10px]"
@@ -106,6 +115,10 @@ export default function MemoryVaultPage() {
                     >
                       {fragment.date}
                     </span>
+                    <div
+                      className="w-1.5 h-1.5 rounded-full opacity-40 group-hover:opacity-100 transition-opacity duration-500"
+                      style={{ background: color }}
+                    />
                   </div>
                 </motion.div>
               );
@@ -114,9 +127,10 @@ export default function MemoryVaultPage() {
         </div>
       </section>
 
+      {/* COUNTER */}
       <section
         className="py-24 md:py-32 px-6 border-t"
-        style={{ borderColor: "rgba(176,141,87,0.1)" }}
+        style={{ borderColor: "rgba(176,141,87,0.08)" }}
       >
         <div className="max-w-4xl mx-auto text-center">
           <motion.p
@@ -132,13 +146,13 @@ export default function MemoryVaultPage() {
             initial={{ opacity: 0, scale: 0.95 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
-            className="text-5xl md:text-7xl"
+            className="text-5xl md:text-7xl lg:text-8xl"
             style={{ fontFamily: "var(--font-mono)", color: "var(--gold)" }}
           >
             2,847,291
           </motion.p>
           <p
-            className="mt-4 text-sm"
+            className="mt-5 text-sm"
             style={{ fontFamily: "var(--font-serif)", fontStyle: "italic", color: "var(--bone-dim)" }}
           >
             fragments of collective intelligence archived
